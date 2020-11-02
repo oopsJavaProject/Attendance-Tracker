@@ -58,9 +58,11 @@ class Main{
         //reading subject names form file to class and instantiating sub list
         int index=0;
         for(String s: data_lst) {
-            if(data_lst[inddex] != "")
+            if(!s.equals("")){
                 sub_lst[index] = new Course(data_lst[index]);
-        }
+                index++;
+            }
+       }
 
         /*sc.readLine();
         sc.readLine();
