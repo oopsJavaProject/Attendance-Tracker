@@ -59,7 +59,7 @@ class Main{
         int index=0;
         for(String s: data_lst) {
             if(!s.equals("")){
-                sub_lst[index] = new Course(data_lst[index]);
+                sub_lst[index] = new Course(s);
                 index++;
             }
        }
