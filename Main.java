@@ -28,7 +28,7 @@ class Course{
         subName = temp_lst[1];
     }
 
-    public static void setNumberOfSubjects() throws IOException,FileNotFoundException {
+    public static void setNumberOfSubjects() throws IOException {
         BufferedReader sc = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
         String[] data_lst;
         String line= sc.readLine();
@@ -45,7 +45,7 @@ class Course{
     public void setAttendance(String name,String rollnum,int[] temp,int studno){
         obj[studno] = new Student(name, rollnum, temp);
     }
-    
+
     public void display(){
         System.out.println( subName+" "+subCode);
         for(Student s:obj)
@@ -100,11 +100,23 @@ class Readdata {
         }
         sc.close();
     }
+    static void writeData() throws  IOException,FileNotFoundException{
+        BufferedReader inp = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
+        BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\Teja\\Downloads\\Attend_edit.csv"));
+        String line;
+        while((line=inp.readLine())!=null){
+            if(!line.isBlank())
+                out.write(line + "\n");
+        }
+        inp.close();
+        out.close();
+    }
 }
 
 class Main{
     public static void main(String[] args)   throws IOException{
         Readdata.readData();
         Readdata.course[0].display();
+        Readdata.writeData();
     }
 }
