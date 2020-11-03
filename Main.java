@@ -45,6 +45,7 @@ class Course{
     public void setAttendance(String name,String rollnum,int[] temp,int studno){
         obj[studno] = new Student(name, rollnum, temp);
     }
+    
     public void display(){
         System.out.println( subName+" "+subCode);
         for(Student s:obj)
@@ -54,8 +55,7 @@ class Course{
 }
 
 class Readdata {
-    static Course[] sub_lst;
-
+    static Course[] course;
 
     static void readData() throws IOException{
         try{
@@ -63,7 +63,7 @@ class Readdata {
         catch (Exception e){
             System.out.println(e);
         }
-        sub_lst = new Course[Course.numberOfSubjects];
+        course = new Course[Course.numberOfSubjects];
 
         BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String line = sc.readLine();
@@ -73,7 +73,7 @@ class Readdata {
         int index = 0;
         for (String s : data_lst) {
             if (!s.isEmpty() && !s.equals("September 2020")) {
-                sub_lst[index] = new Course(s);
+                course[index] = new Course(s);
                 index++;
             }
         }
@@ -92,7 +92,7 @@ class Readdata {
             while (count < Course.numberOfSubjects) {
                 for (int i = 2 + (count * 4), ind = 0; i < 6 + (count * 4); i++, ind++)
                     temp[ind] = Integer.parseInt(data_lst[i]);
-                sub_lst[count].setAttendance(data_lst[0], data_lst[1], temp,studno);
+                course[count].setAttendance(data_lst[0], data_lst[1], temp,studno);
                 count++;
             }
             line = sc.readLine();
@@ -105,6 +105,6 @@ class Readdata {
 class Main{
     public static void main(String[] args)   throws IOException{
         Readdata.readData();
-        Readdata.sub_lst[0].display();
+        Readdata.course[0].display();
     }
 }
