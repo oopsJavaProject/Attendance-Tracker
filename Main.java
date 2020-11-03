@@ -9,15 +9,18 @@ class Student{
     public Student(String studRollNo, String studName,int[] ar) {
         this.studRollNo = studRollNo;
         this.studName = studName ;
-        for(int i=0;i<4;i++)
-            attend[i]=ar[i];
+        System.arraycopy(ar, 0, attend, 0, 4);
+    }
+
+    public String toString(){
+        return studName+" "+studRollNo+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
     }
 }
 
 class Course{
     public static int numberOfSubjects=0;
-    private String subName ;
-    private String subCode ;
+    public String subName ;
+    public String subCode ;
     public Student[] obj = new Student[100];
 
     Course(String sub){
@@ -36,11 +39,15 @@ class Course{
                 numberOfSubjects += 1;
             }
         }
+        numberOfSubjects--;
         sc.close();
     }
 
-    public void getData(){
-
+    public void display(){
+        System.out.println( subName+" "+subCode);
+        for(Student s:obj)
+            if(s!=null)
+                System.out.println(s);
     }
 }
 
@@ -49,12 +56,11 @@ class Main{
         Course.setNumberOfSubjects();
         Course[] sub_lst = new Course[Course.numberOfSubjects];
 
-        //BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
+
         BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String line= sc.readLine();
         String[] data_lst;
         data_lst = line.split(",");
-        System.out.println(data_lst.length);
         //reading subject names form file to class and instantiating sub list
         int index=0;
         for(String s: data_lst) {
@@ -62,26 +68,32 @@ class Main{
                 sub_lst[index] = new Course(s);
                 index++;
             }
-       }
+        }
 
-        /*sc.readLine();
+        sc.readLine();
         sc.readLine();
         sc.readLine();
         line = sc.readLine();
-
         int studno=0;
-        while(!line.equals("")){
+        while(line!=null){
             data_lst = line.split(",");
+            if(data_lst.length==0)
+                break;
+            //for(String s:data_lst) {
+            //    System.out.print(s+" ");
+            //}
             int[] temp = new int[4];
             int count=0;
             while(count<Course.numberOfSubjects){
-                for(int i=2+(Course.numberOfSubjects*4), index=0 ;i<6+(Course.numberOfSubjects*4);i++,index++)
-                    temp[index]= Integer.parseInt(data_lst[i]);
-
+                for(int i=2+(count*4), ind=0 ;i<6+(count*4);i++,ind++)
+                    temp[ind]= Integer.parseInt(data_lst[i]);
                 sub_lst[count].obj[studno] = new Student(data_lst[0],data_lst[1],temp);
+                count++;
             }
+            line = sc.readLine();
             studno++;
         }
-        sc.close();*/
+        sub_lst[1].display();
+        sc.close();
     }
 }
