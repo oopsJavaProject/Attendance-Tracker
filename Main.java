@@ -79,9 +79,6 @@ class Main{
             data_lst = line.split(",");
             if(data_lst.length==0)
                 break;
-            //for(String s:data_lst) {
-            //    System.out.print(s+" ");
-            //}
             int[] temp = new int[4];
             int count=0;
             while(count<Course.numberOfSubjects){
