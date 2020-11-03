@@ -58,7 +58,7 @@ class Main{
         //reading subject names form file to class and instantiating sub list
         int index=0;
         for(String s: data_lst) {
-            if(!s.equals("")){
+            if(!s.isEmpty() && !s.equals("September 2020")){
                 sub_lst[index] = new Course(s);
                 index++;
             }
