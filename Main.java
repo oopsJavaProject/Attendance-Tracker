@@ -2,8 +2,7 @@ package com.company;
 import java.io.*;
 
 class Student{
-    private String studName ;
-    private String studRollNo ;
+    private String studName,studRollNo ;
     private int[] attend = new int[4];
     public Student(String studRollNo, String studName,int[] ar) {
         this.studRollNo = studRollNo;
@@ -13,16 +12,15 @@ class Student{
 
     public String toString(int flag){
         if(flag==1)
-            return studName+","+studRollNo+","+attend[0]+","+attend[1]+","+attend[2]+","+attend[3]+",";
+            return studName+","+studRollNo+","+attend[0]+","+attend[1]+","+attend[2]+","+attend[3];
         else
-            return attend[0]+","+attend[1]+","+attend[2]+","+attend[3];
+            return ","+attend[0]+","+attend[1]+","+attend[2]+","+attend[3];
     }
 }
 
 class Course{
     public static int numberOfSubjects=0;
-    private String subName ;
-    private String subCode ;
+    private String subName, subCode ;
     private Student[] obj = new Student[100];
 
     Course(String sub){
@@ -124,9 +122,9 @@ class Readdata {
 
         Student obj;
         int flag=0;
-        String s = new String();
         for(int i=0;i<100;i++) {
             count=0;
+            String s = new String();
             while (count < Course.numberOfSubjects) {
                 obj = course[count].getInfoStud(i);
                 if(obj==null){
@@ -134,15 +132,14 @@ class Readdata {
                     break;
                 }
                 if (count == 0)
-                    s.concat(obj.toString(1));
+                    s=s+obj.toString(1);
                 else
-                    s.concat(obj.toString(0));
+                    s=s+obj.toString(0);
                 count++;
             }
             if(flag==1)
                 break;
-            out.write(s);
-            System.out.println(s);
+            out.write(s+'\n');
         }
         inp.close();
         out.close();
