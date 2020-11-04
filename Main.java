@@ -11,8 +11,11 @@ class Student{
         System.arraycopy(ar, 0, attend, 0, 4);
     }
 
-    public String toString(){
-        return studName+" "+studRollNo+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
+    public String toString(int flag){
+        if(flag==1)
+            return studName+","+studRollNo+","+attend[0]+","+attend[1]+","+attend[2]+","+attend[3]+",";
+        else
+            return attend[0]+","+attend[1]+","+attend[2]+","+attend[3];
     }
 }
 
@@ -29,7 +32,7 @@ class Course{
     }
 
     public static void setNumberOfSubjects() throws IOException {
-        BufferedReader sc = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
+        BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String[] data_lst;
         String line= sc.readLine();
         data_lst = line.split(",");
@@ -50,7 +53,11 @@ class Course{
         System.out.println( subName+" "+subCode);
         for(Student s:obj)
             if(s!=null)
-                System.out.println(s);
+                System.out.println(s.toString(1));
+    }
+
+    public Student getInfoStud(int ind){
+        return obj[ind];
     }
 }
 
@@ -59,7 +66,8 @@ class Readdata {
 
     static void readData() throws IOException{
         try{
-            Course.setNumberOfSubjects();}
+            Course.setNumberOfSubjects();
+        }
         catch (Exception e){
             System.out.println(e);
         }
@@ -69,7 +77,9 @@ class Readdata {
         String line = sc.readLine();
         String[] data_lst;
         data_lst = line.split(",");
+
         //reading subject names form file to class and instantiating sub list
+
         int index = 0;
         for (String s : data_lst) {
             if (!s.isEmpty() && !s.equals("September 2020")) {
@@ -104,9 +114,35 @@ class Readdata {
         BufferedReader inp = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\Teja\\Downloads\\Attend_edit.csv"));
         String line;
+        int count=0;
         while((line=inp.readLine())!=null){
-            if(!line.isBlank())
-                out.write(line + "\n");
+            out.write(line + "\n");
+            count++;
+            if(count==4)
+                break;
+        }
+
+        Student obj;
+        int flag=0;
+        String s = new String();
+        for(int i=0;i<100;i++) {
+            count=0;
+            while (count < Course.numberOfSubjects) {
+                obj = course[count].getInfoStud(i);
+                if(obj==null){
+                    flag=1;
+                    break;
+                }
+                if (count == 0)
+                    s.concat(obj.toString(1));
+                else
+                    s.concat(obj.toString(0));
+                count++;
+            }
+            if(flag==1)
+                break;
+            out.write(s);
+            System.out.println(s);
         }
         inp.close();
         out.close();
@@ -116,7 +152,7 @@ class Readdata {
 class Main{
     public static void main(String[] args)   throws IOException{
         Readdata.readData();
-        Readdata.course[0].display();
+        //Readdata.course[6].display();
         Readdata.writeData();
     }
 }
