@@ -16,6 +16,12 @@ class Student{
         else
             return ","+attend[0]+","+attend[1]+","+attend[2]+","+attend[3];
     }
+
+    public boolean check(String name, String roll){
+        if(studName.equals(name) && studRollNo.equals(roll))
+            return true;
+        return false;
+    }
 }
 
 class Course{
@@ -57,13 +63,13 @@ class Course{
     public Student getInfoStud(int ind){
         return obj[ind];
     }
-    
-    public  Student getInfoStud(String name,String rollnum){
+
+    public int getInfoStud(String name, String rollnum){
         for(int i=0;i<100;i++)
-            if(obj[i].Studname.equals(name))
+            if(obj[i].check(name,rollnum))
                 return i;
-            
-        return -1;    
+
+        return -1;
     }
 }
 
