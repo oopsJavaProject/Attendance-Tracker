@@ -57,6 +57,14 @@ class Course{
     public Student getInfoStud(int ind){
         return obj[ind];
     }
+    
+    public  Student getInfoStud(String name,String rollnum){
+        for(int i=0;i<100;i++)
+            if(obj[i].Studname.equals(name))
+                return i;
+            
+        return -1;    
+    }
 }
 
 class Readdata {
@@ -149,7 +157,7 @@ class Readdata {
 class Main{
     public static void main(String[] args)   throws IOException{
         Readdata.readData();
-        //Readdata.course[6].display();
+        Readdata.course[6].display();
         Readdata.writeData();
     }
 }
