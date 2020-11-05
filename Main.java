@@ -64,12 +64,12 @@ class Course{
         return obj[ind];
     }
 
-    public int getInfoStud(String name, String rollnum){
+    public Student getInfoStud(String name, String rollnum){
         for(int i=0;i<100;i++)
             if(obj[i].check(name,rollnum))
-                return i;
-
-        return -1;
+                return obj[i];
+        
+        return null;
     }
 }
 
