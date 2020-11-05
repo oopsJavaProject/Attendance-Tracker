@@ -2,15 +2,13 @@ package pack;
 import jdk.swing.interop.SwingInterOpUtils;
 
 import java.io.*;
-import java.util.Scanner;
 
 
 
 
 
 class Student{
-    private String studName ;
-    private String studRollNo ;
+    private String studName,studRollNo ;
     private int[] attend = new int[4];
     public Student(String studRollNo, String studName,int[] ar) {
         this.studRollNo = studRollNo;
@@ -29,10 +27,12 @@ class Student{
         if(studName.equals(name) && studRollNo.equals(roll))
             return true;
         return false;
+
     }
 
     public String toString(){
         return studName+" "+studRollNo+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
+
     }
 }
 class StudentLogIn{
@@ -54,8 +54,12 @@ class StudentLogIn{
 }
 class Course{
     public static int numberOfSubjects=0;
+
     private String subName ;
     private String subCode ;
+
+    private String subName, subCode ;
+
     private Student[] obj = new Student[100];
 
     Course(String sub){
@@ -65,7 +69,7 @@ class Course{
     }
 
     public static void setNumberOfSubjects() throws IOException {
-        BufferedReader sc = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
+        BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String[] data_lst;
         String line= sc.readLine();
         data_lst = line.split(",");
@@ -86,12 +90,16 @@ class Course{
         System.out.println( subName+" "+subCode);
         for(Student s:obj)
             if(s!=null)
+
                 System.out.println(s);
+                System.out.println(s.toString(1));
+
     }
 
     public Student getInfoStud(int ind){
         return obj[ind];
     }
+
 
     public int getInfoStud(String name, String rollnum){
         for(int i=0;i<Readdata.studno;i++)
@@ -104,6 +112,15 @@ class Course{
     public Student displayStud(int ind){
         System.out.println("\n"+subName+" "+subCode);
         return obj[ind];
+
+
+    public Student getInfoStud(String name, String rollnum){
+        for(int i=0;i<100;i++)
+            if(obj[i].check(name,rollnum))
+                return obj[i];
+        
+        return null;
+
     }
 }
 
@@ -124,6 +141,22 @@ class Readdata {
         String[] data_lst;
         data_lst = line.split(",");
         //reading subject names form file to class and instantiating sub list
+    static void readData() throws IOException{
+        try{
+            Course.setNumberOfSubjects();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        course = new Course[Course.numberOfSubjects];
+
+        BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
+        String line = sc.readLine();
+        String[] data_lst;
+        data_lst = line.split(",");
+
+        //reading subject names form file to class and instantiating sub list
+
         int index = 0;
         for (String s : data_lst) {
             if (!s.isEmpty() && !s.equals("September 2020")) {
@@ -137,6 +170,7 @@ class Readdata {
         sc.readLine();
         line = sc.readLine();
         studno = 0;
+        int studno= 0;
         while (line != null) {
             data_lst = line.split(",");
             if (data_lst.length == 0)
@@ -153,6 +187,7 @@ class Readdata {
             studno++;
         }
         sc.close();
+
     }
     static void writeData() throws  IOException,FileNotFoundException{
         BufferedReader inp = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
@@ -211,4 +246,51 @@ class Main{
             password = in.nextLine();
         }
     }
+
+    }
+    static void writeData() throws  IOException,FileNotFoundException{
+        BufferedReader inp = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
+        BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\Teja\\Downloads\\Attend_edit.csv"));
+        String line;
+        int count=0;
+        while((line=inp.readLine())!=null){
+            out.write(line + "\n");
+            count++;
+            if(count==4)
+                break;
+        }
+
+        Student obj;
+        int flag=0;
+        for(int i=0;i<100;i++) {
+            count=0;
+            String s = new String();
+            while (count < Course.numberOfSubjects) {
+                obj = course[count].getInfoStud(i);
+                if(obj==null){
+                    flag=1;
+                    break;
+                }
+                if (count == 0)
+                    s=s+obj.toString(1);
+                else
+                    s=s+obj.toString(0);
+                count++;
+            }
+            if(flag==1)
+                break;
+            out.write(s+'\n');
+        }
+        inp.close();
+        out.close();
+    }
+}
+
+class Main{
+    public static void main(String[] args)   throws IOException{
+        Readdata.readData();
+        Readdata.course[6].display();
+        Readdata.writeData();
+    }
+
 }
