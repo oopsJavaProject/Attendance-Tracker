@@ -9,6 +9,7 @@ class Student{
     private String studName ;
     private String studRollNo ;
     private int[] attend = new int[4];
+
     public Student(String studRollNo, String studName,int[] ar) {
         this.studRollNo = studRollNo;
         this.studName = studName ;
@@ -23,7 +24,7 @@ class Student{
     }
 
     public boolean check(String name, String roll){
-        if(studName.equals(name) && studRollNo.equals(roll))
+        if(studName.equalsIgnoreCase(name) && studRollNo.equalsIgnoreCase(roll))
             return true;
         return false;
     }
@@ -31,12 +32,24 @@ class Student{
     public String toString(){
         return studName+" "+studRollNo+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
     }
+
 }
 
 class StudentLogIn{
     static Student obj=null;
-
-    static boolean checkMatch(String name, String roll){
+    static void getinfo() throws IOException {
+        System.out.printf("%-40cStudent Login\n",' ');
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter Username :");
+        String userName = in.nextLine();
+        System.out.print("Enter Password :");
+        String password = in.nextLine();
+        while(!StudentLogIn.checkMatch(userName, password)){
+            System.out.println("INVALID USERNAME PASSWORD");
+            StudentLogIn.getinfo();
+        }
+    }
+    private static boolean checkMatch(String name, String roll){
         for(Course sub:Data.course){
             if(sub.getInfoStud(name,roll)!=null) {
                 obj=sub.getInfoStud(name,roll);
@@ -93,8 +106,9 @@ class Course{
 
     public Student getInfoStud(String name, String rollnum){
         for(int i=0;i<100;i++)
-            if(obj[i].check(name,rollnum))
-                return obj[i];
+            if(obj[i]!=null)
+                if(obj[i].check(name,rollnum))
+                    return obj[i];
 
         return null;
     }
@@ -187,20 +201,11 @@ class Data {
 
 class Main{
     public static void main(String[] args)   throws IOException{
-        Scanner in = new Scanner(System.in);
+
         Data.readData();
         //Readdata.course[0].display();
+        StudentLogIn.getinfo();
         Data.writeData();
-        System.out.print("Enter Username :");
-        String userName = in.nextLine();
-        System.out.print("Enter Password :");
-        String password = in.nextLine();
-        while(!StudentLogIn.checkMatch(userName, password)){
-            System.out.println("INVALID USERNAME PASSWORD");
-            System.out.print("Enter Username :");
-            userName = in.nextLine();
-            System.out.print("Enter Password :");
-            password = in.nextLine();
-        }
+
     }
 }
