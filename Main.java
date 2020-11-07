@@ -64,7 +64,8 @@ class StudentLogIn{
 
 class Course{
     public static int numberOfSubjects=0;
-    private String subName ,subCode ;
+    private String subName ,subCode;
+    private static String month;
     private Student[] obj = new Student[100];
 
     Course(String sub){
@@ -79,6 +80,8 @@ class Course{
         String line= sc.readLine();
         data_lst = line.split(",");
         for (String s : data_lst) {
+            if(numberOfSubjects==0)
+                month = s;
             if (!s.equals("")) {
                 numberOfSubjects += 1;
             }
@@ -92,8 +95,9 @@ class Course{
     }
 
     public void display(int flag){
+        System.out.println(month);
         System.out.print(subName+" "+subCode+"\n");
-        if(flag){
+        if(flag!=0){
             for(Student s:obj)
                 if(s!=null)
                     System.out.println(s);
@@ -198,15 +202,15 @@ class Data {
         inp.close();
         out.close();
     }
-    
+
 }
 
 class Main{
     public static void main(String[] args)   throws IOException{
 
         Data.readData();
-        //Data.course[0].display(1);
-        StudentLogIn.getinfo();
+        Data.course[0].display(1);
+        //StudentLogIn.getinfo();
         Data.writeData();
 
     }
