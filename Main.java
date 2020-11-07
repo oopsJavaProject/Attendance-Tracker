@@ -6,8 +6,7 @@ import java.util.Scanner;
 
 
 class Student{
-    private String studName ;
-    private String studRollNo ;
+    private String studName ,studRollNo ;
     private int[] attend = new int[4];
 
     public Student(String studRollNo, String studName,int[] ar) {
@@ -37,6 +36,7 @@ class Student{
 
 class StudentLogIn{
     static Student obj=null;
+
     static void getinfo() throws IOException {
         System.out.printf("%-40cStudent Login\n",' ');
         Scanner in = new Scanner(System.in);
@@ -49,6 +49,7 @@ class StudentLogIn{
             StudentLogIn.getinfo();
         }
     }
+
     private static boolean checkMatch(String name, String roll){
         for(Course sub:Data.course){
             if(sub.getInfoStud(name,roll)!=null) {
@@ -63,8 +64,7 @@ class StudentLogIn{
 
 class Course{
     public static int numberOfSubjects=0;
-    private String subName ;
-    private String subCode ;
+    private String subName ,subCode ;
     private Student[] obj = new Student[100];
 
     Course(String sub){
@@ -74,7 +74,7 @@ class Course{
     }
 
     public static void setNumberOfSubjects() throws IOException {
-        BufferedReader sc = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
+        BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String[] data_lst;
         String line= sc.readLine();
         data_lst = line.split(",");
@@ -92,11 +92,11 @@ class Course{
     }
 
     public void display(int flag){
-        System.out.print( subName+" "+subCode+" ");
-        if(flag!=0){
-        for(Student s:obj)
-            if(s!=null)
-                System.out.println(s);
+        System.out.print(subName+" "+subCode+"\n");
+        if(flag){
+            for(Student s:obj)
+                if(s!=null)
+                    System.out.println(s);
         }
     }
 
@@ -125,17 +125,18 @@ class Data {
         }
         course = new Course[Course.numberOfSubjects];
 
-        BufferedReader sc = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
+        BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String line = sc.readLine();
         String[] data_lst;
         data_lst = line.split(",");
         //reading subject names form file to class and instantiating sub list
-        int index = 0;
+        int index = 0,count=0;
         for (String s : data_lst) {
-            if (!s.isEmpty() && !s.equals("September 2020")) {
+            if (!s.isEmpty() && count!=0) {
                 course[index] = new Course(s);
                 index++;
             }
+            count++;
         }
 
         sc.readLine();
@@ -148,7 +149,7 @@ class Data {
             if (data_lst.length == 0)
                 break;
             int[] temp = new int[4];
-            int count = 0;
+            count = 0;
             while (count < Course.numberOfSubjects) {
                 for (int i = 2 + (count * 4), ind = 0; i < 6 + (count * 4); i++, ind++)
                     temp[ind] = Integer.parseInt(data_lst[i]);
@@ -162,8 +163,8 @@ class Data {
     }
 
     static void writeData() throws  IOException{
-        BufferedReader inp = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
-        BufferedWriter out = new BufferedWriter(new FileWriter("D:\\3rd Sem psg tech\\OOPS\\Attend_copy.csv"));
+        BufferedReader inp = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
+        BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\Teja\\Downloads\\Attend_copy.csv"));
         String line;
         int count=0;
         while((line=inp.readLine())!=null){
@@ -197,13 +198,14 @@ class Data {
         inp.close();
         out.close();
     }
+    
 }
 
 class Main{
     public static void main(String[] args)   throws IOException{
 
         Data.readData();
-        //Readdata.course[0].display();
+        //Data.course[0].display(1);
         StudentLogIn.getinfo();
         Data.writeData();
 
