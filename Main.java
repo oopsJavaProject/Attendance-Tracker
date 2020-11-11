@@ -118,7 +118,7 @@ class StaffLogin{
     }
 
     private static void attendanceEntry(int ind){
-        System.out.printf("P - present\nL-late\nE-excused adsence\nU-unexcused adsence\n");
+        System.out.print("P - present\nL-late\nE-excused adsence\nU-unexcused adsence\n");
         boolean inpFlag=false;
         for(int i=0;i<100;i++){
             String ch;
@@ -157,7 +157,7 @@ class StaffLogin{
             changeEntry(ind);
         }
         System.out.println("Enter new values for Present, absent and unexcused absence respectively");
-        int ar[] = new int[4];
+        int[] ar = new int[4];
         for(int i=0;i<4;i++)
             ar[i] = in.nextInt();
         Data.course[ind].setAttendance(rollNum,Name,ar,studInd);
@@ -240,19 +240,19 @@ class Course{
 class Data {
     static Course[] course;
 
-    static void readData() throws IOException{
+    static void readData(){
         try{
             Course.setNumberOfSubjects();}
         catch (Exception e){
             System.out.println(e);
         }
         course = new Course[Course.numberOfSubjects];
-
-        BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
+        try { 
+            BufferedReader sc = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String line = sc.readLine();
         String[] data_lst;
         data_lst = line.split(",");
-        //reading subject names form file to class and instantiating sub list
+        
         int index = 0,count=0;
         for (String s : data_lst) {
             if (!s.isEmpty() && count!=0) {
@@ -283,11 +283,15 @@ class Data {
             studno++;
         }
         sc.close();
+        } catch (IOException e){
+            System.out.println(e);
+        }
     }
 
-    static void writeData() throws  IOException{
+    static void writeData(){
+        try{
         BufferedReader inp = new BufferedReader(new FileReader("C:\\Users\\Teja\\Downloads\\Attend.csv"));
-        BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\Teja\\Downloads\\Attend_copy.csv"));
+        BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\Teja\\Downloads\\Attend.csv"));
         String line;
         int count=0;
         while((line=inp.readLine())!=null){
@@ -320,15 +324,18 @@ class Data {
         }
         inp.close();
         out.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 
 }
 
 class Main{
-    public static void main(String[] args)   throws IOException{
+    public static void main(String[] args){
         Data.readData();
-        //StudentLogIn.getinfo();
-        //StaffLogin.getinfo();
+        StudentLogIn.getinfo();
+        StaffLogin.getinfo();
         Data.writeData();
     }
 }
