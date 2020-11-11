@@ -15,6 +15,12 @@ class Student{
         System.arraycopy(ar, 0, attend, 0, 4);
     }
 
+    public Student(Student obj){
+        studName = obj.studName;
+        studRollNo = obj.studRollNo;
+        System.arraycopy(obj.attend,0,attend,0,4);
+    }
+
     public String toString(int flag){
         if(flag==1)
             return studName+","+studRollNo+","+attend[0]+","+attend[1]+","+attend[2]+","+attend[3];
@@ -23,21 +29,26 @@ class Student{
     }
 
     public boolean check(String name, String roll){
-        if(studName.equalsIgnoreCase(name) && studRollNo.equalsIgnoreCase(roll))
-            return true;
-        return false;
+        return studName.equalsIgnoreCase(name) && studRollNo.equalsIgnoreCase(roll);
     }
 
     public String toString(){
         return studName+" "+studRollNo+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
     }
 
+    public String getName() {
+        return studName+"-"+studRollNo;
+    }
+
+    public void incrementVal(int flag){
+        attend[flag]++;
+    }
 }
 
 class StudentLogIn{
-    static Student obj=null;
+    public static Student obj=null;
 
-    static void getinfo() throws IOException {
+    public static void getinfo(){
         System.out.printf("%-40cStudent Login\n",' ');
         Scanner in = new Scanner(System.in);
         System.out.print("Enter Username :");
@@ -59,6 +70,99 @@ class StudentLogIn{
             }
         }
         return obj != null;
+    }
+}
+
+class StaffLogin{
+    private static int ind;
+
+    static void getinfo(){
+        System.out.printf("%-40cStaff Login\n",' ');
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter Username :");    // course code
+        String userName = in.nextLine();
+        System.out.print("Enter Password :");    // course code PSGTECH
+        String password = in.nextLine();
+        ind=StaffLogin.checkMatch(userName, password);
+        while(ind==-1){
+            System.out.println("INVALID USERNAME PASSWORD");
+            StaffLogin.getinfo();
+        }
+        StaffLogin.menu();
+    }
+
+    private static int checkMatch(String name,String pass){
+        int ind=0;
+        for(Course obj: Data.course){
+            if(obj.check(name,pass))
+                return ind;
+        }
+        return -1;
+    }
+
+    private static void menu(){
+        System.out.printf("%40cStaff\n",' ');
+        System.out.println("1. View");
+        System.out.println("2. Edit student record");
+        System.out.println("3. Attendance entry");
+        Scanner in = new Scanner(System.in);
+        int ch;
+        ch = in.nextInt();
+        if(ch==1) Data.course[ind].display(1);
+        else if(ch==2) changeEntry(ind);
+        else if(ch==3) attendanceEntry(ind);
+        else {
+            System.out.println("Invalid input");
+            StaffLogin.menu();
+        }
+    }
+
+    private static void attendanceEntry(int ind){
+        System.out.printf("P - present\nL-late\nE-excused adsence\nU-unexcused adsence\n");
+        boolean inpFlag=false;
+        for(int i=0;i<100;i++){
+            String ch;
+            if(inpFlag){
+                System.out.println("invalid input");
+                inpFlag=false;
+            }
+            Scanner in = new Scanner(System.in);
+            Student obj = Data.course[ind].getInfoStud(i);
+            if(obj==null)
+                break;
+            System.out.printf("%d. %s%-30c",i+1,obj.getName(),' ');
+            ch=in.nextLine();
+            if(ch.equalsIgnoreCase("p")) obj.incrementVal(0);
+            else if(ch.equalsIgnoreCase("l")) obj.incrementVal(1);
+            else if(ch.equalsIgnoreCase("e")) obj.incrementVal(2);
+            else if(ch.equalsIgnoreCase("u")) obj.incrementVal(3);
+            else {
+                inpFlag=true;
+                i--;
+            }
+            Data.course[ind].setAttendance(obj,i);
+            System.out.println("Entries recorded");
+        }
+    }
+
+    private static void changeEntry(int ind){
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter student name        : ");
+        String Name = in.nextLine();
+        System.out.print("Enter student roll number : ");
+        String rollNum = in.nextLine();
+        int studInd = Data.course[ind].getStudind(Name,rollNum);
+        if(studInd==-1){
+            System.out.println("Invalid input");
+            changeEntry(ind);
+        }
+        System.out.println("Enter new values for Present, absent and unexcused absence respectively");
+        int ar[] = new int[4];
+        for(int i=0;i<4;i++)
+            ar[i] = in.nextInt();
+        Data.course[ind].setAttendance(rollNum,Name,ar,studInd);
+
+        System.out.println("Entries recorded");
     }
 }
 
@@ -94,6 +198,14 @@ class Course{
         obj[studno] = new Student(name, rollnum, temp);
     }
 
+    public void setAttendance(Student obj,int ind){
+        this.obj[ind]= new Student(obj);
+    }
+
+    public boolean check(String name, String pass){
+        return subCode.equals(name) && pass.equals(subCode+"PSGTECH");
+    }
+
     public void display(int flag){
         System.out.println(month);
         System.out.print(subName+" "+subCode+"\n");
@@ -113,8 +225,15 @@ class Course{
             if(obj[i]!=null)
                 if(obj[i].check(name,rollnum))
                     return obj[i];
-
         return null;
+    }
+
+    public int getStudind(String name, String rollnum){
+        for(int i=0;i<100;i++)
+            if(obj[i]!=null)
+                if(obj[i].check(name,rollnum))
+                    return i;
+        return -1;
     }
 }
 
@@ -207,11 +326,9 @@ class Data {
 
 class Main{
     public static void main(String[] args)   throws IOException{
-
         Data.readData();
-        Data.course[0].display(1);
         //StudentLogIn.getinfo();
+        //StaffLogin.getinfo();
         Data.writeData();
-
     }
 }
