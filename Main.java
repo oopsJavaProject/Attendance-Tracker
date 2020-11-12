@@ -698,8 +698,8 @@ class Main{
         jl2 = new JLabel("Password ");
 
         JTextField jt1, jt2 ;
-        jt1 = new JTextField("19Z301");
-        jt2 = new JPasswordField("19Z301PSGTECH");
+        jt1 = new JTextField();
+        jt2 = new JPasswordField();
         jt1.setBounds(500, 200, 200, 20);
         jt2.setBounds(500, 240, 200, 20);
         jf.add(jt1);jf.add(jt2);
