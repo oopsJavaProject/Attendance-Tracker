@@ -1,4 +1,4 @@
-package com.company;
+package pack2;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -37,7 +37,7 @@ class Student{
     }
 
     public String toString(){
-        return studName+" "+studRollNo+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
+        return studRollNo+" "+studName+" "+attend[0]+" "+attend[1]+" "+attend[2]+" "+attend[3];
     }
 
     public int[] getAttend(){
@@ -92,13 +92,15 @@ class StudentLogIn{
                 if(i!=0) {
                     for(int att : obj.getAttend()) {
                         data[j][i] = String.valueOf(att);
+                        //System.out.println(data[j][i]);
                         i++;
                     }
                 }
-            }
+
+            }/*sub.display(0);
+                System.out.println(obj.toString());*/
             j++;
         }
-
         if(obj != null){
             JFrame newJf = new JFrame("Student LogIn");
             JLabel nameJl = new JLabel("Name : "+obj.nameRoll(1));
@@ -106,17 +108,21 @@ class StudentLogIn{
             nameJl.setBounds(30, 10, 400, 20);
             rollJl.setBounds(30, 30, 100, 20);
             newJf.add(nameJl); newJf.add(rollJl);
+
             JTable jTab = new JTable(data, heading);
             jTab.setBounds(30, 60, 1000, 300);
             newJf.add(jTab);
+            //JTableHeader header = jTab.getTableHeader();
+            //header.setBackground(Color.LIGHT_GRAY);
+            //JScrollPane sp=new JScrollPane(jTab);
+            //newJf.add(sp);
+
             newJf.setSize(1100, 500);
             newJf.setLayout(null);
             newJf.setVisible(true);
         }
-
         return obj != null;
     }
-
 }
 
 class StaffLogin {
@@ -181,7 +187,21 @@ class StaffLogin {
                 attendanceEntry(ind);
             }
         });
-    }
+        /*System.out.println("1. View");
+        System.out.println("2. Edit student record");
+        System.out.println("3. Attendance entry");
+        Scanner in = new Scanner(System.in);
+        int ch;
+        ch = in.nextInt();
+        if(ch==1) Data.course[ind].display(1);
+        else if(ch==2) changeEntry(ind);
+        else if(ch==3) attendanceEntry(ind);
+        else {
+            System.out.println("Invalid input");
+            StaffLogin.menu();
+        }*/
+
+}
 
 
     private static void attendanceEntry(int ind){
@@ -200,9 +220,12 @@ class StaffLogin {
         JRadioButton[] u = new JRadioButton[100];
         ButtonGroup[] atten = new ButtonGroup[100];
 
+        //System.out.print("P - present\nL-late\nE-excused adsence\nU-unexcused adsence\n");
+
         int  space =-1;
         for(int i=0;i<100;i++) {
 
+            //Scanner in = new Scanner(System.in);
             Student obj = Data.course[ind].getInfoStud(i);
             if (obj == null) {
                 break;
@@ -213,6 +236,7 @@ class StaffLogin {
             name.setBounds(5+(space*312), (i%30) * 20 + 80, 150, 20);
             entF.add(name);
 
+            //System.out.printf("%d. %s%-30c",i+1,obj.getName(),' ');
             p[i] = new JRadioButton("P");
             p[i].setBounds(190+(space*300), (i%30) * 20 + 80, 34, 20);
             entF.add(p[i]);
@@ -255,6 +279,12 @@ class StaffLogin {
                 if(inpFlag) {
                     for (int i = 0; i < 100; i++) {
 
+                    /*if (inpFlag) {
+                        JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
+                        inpFlag = false;
+                        break;
+                    }*/
+                        //Scanner in = new Scanner(System.in);
                         Student obj = Data.course[ind].getInfoStud(i);
                         if (obj == null)
                             break;
@@ -268,6 +298,7 @@ class StaffLogin {
                             break;
                         }
                         Data.course[ind].setAttendance(obj, i);
+                        //System.out.println("Entries recorded");
                     }
                 }
             }
@@ -304,7 +335,7 @@ class StaffLogin {
         check.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ec) {
-
+                
                 String Name = jtN.getText();
                 String rollNum = jtR.getText();
                 int studInd = Data.course[ind].getStudind(Name,rollNum);
@@ -360,6 +391,9 @@ class StaffLogin {
                     submit1.setBounds(100, 280, 80, 40);
                     chan1.add(submit1);
 
+                    //System.out.println("Enter new values for Present, absent and unexcused absence respectively");
+
+
                     submit1.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -378,7 +412,72 @@ class StaffLogin {
 
             }
         });
-        
+        String Name = jtN.getText();
+        String rollNum = jtR.getText();
+        int studInd = Data.course[ind].getStudind(Name,rollNum);
+        if (studInd != -1) {
+            JFrame chan1 = new JFrame("Change entry");
+            chan1.setSize(1100, 500);
+            chan1.setLayout(null);
+            chan1.setVisible(true);
+            Student obj = Data.course[ind].getInfoStud(studInd);
+
+            JLabel info = new JLabel("Old values for Present, Late, ExcusedAbsence and UnexcusedAbsence are" + obj.toString(0) + " respectively");
+            info.setBounds(10, 60, 250, 20);
+            chan1.add(info);
+
+            JLabel info2 = new JLabel("Enter new values");
+            info2.setBounds(50, 80, 80, 20);
+            chan1.add(info2);
+
+            JLabel p = new JLabel("Present");
+            p.setBounds(50, 100, 80, 20);
+            chan1.add(p);
+            JTextField pt = new JTextField();
+            pt.setBounds(130, 100, 30, 30);
+            chan1.add(pt);
+
+            JLabel l = new JLabel("Late");
+            l.setBounds(50, 120, 80, 20);
+            chan1.add(l);
+            JTextField lt = new JTextField();
+            lt.setBounds(130, 120, 30, 30);
+            chan1.add(lt);
+
+            JLabel e = new JLabel("ExcusedAbsence");
+            e.setBounds(50, 140, 80, 20);
+            chan1.add(e);
+            JTextField et = new JTextField();
+            et.setBounds(130, 140, 30, 30);
+            chan1.add(et);
+
+            JLabel u = new JLabel("UnexcusedAbsence");
+            u.setBounds(50, 160, 80, 20);
+            chan1.add(u);
+            JTextField ut = new JTextField();
+            ut.setBounds(130, 160, 30, 30);
+            chan1.add(ut);
+
+            //System.out.println("Enter new values for Present, absent and unexcused absence respectively");
+            int[] ar = new int[4];
+            ar[0] = Integer.parseInt(pt.getText());
+            ar[1] = Integer.parseInt(lt.getText());
+            ar[2] = Integer.parseInt(et.getText());
+            ar[3] = Integer.parseInt(ut.getText());
+            JButton submit = new JButton("Submit");
+            submit.setBounds(100, 200, 80, 40);
+            chan1.add(submit);
+            submit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String Name = jtN.getText();
+                    String rollNum = jtR.getText();
+                    int studInd = Data.course[ind].getStudind(Name, rollNum);
+                    Data.course[ind].setAttendance(rollNum, Name, ar, studInd);
+                }
+            });
+        }
+        //System.out.println("Entries recorded");
     }
 }
 
@@ -431,13 +530,14 @@ class Course{
         int j=0;
         for(Student s:obj) {
             if (s != null){
-                data[j] = s.toString(1).split(",");
-                j++;
+               data[j] = s.toString(1).split(",");
+               j++;
             }
         }
 
         JTable jTab = new JTable(data, heading);
         jTab.setBounds(30, 60, 1000, 500);
+        //view.add(jTab);
 
         JTableHeader header = jTab.getTableHeader();
         header.setBackground(Color.lightGray);
@@ -447,11 +547,21 @@ class Course{
         view.add(panel);
         view.setUndecorated(true);
         view.getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
+
+
         view.setSize(1100, 500);
+        //view.setLayout(null);
         view.setVisible(true);
+        //view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        /*System.out.println(month);
+        System.out.print(subName+" "+subCode+"\n");
+        if(flag!=0){
+            for(Student s:obj)
+                if(s!=null)
+                    System.out.println(s);
+        }*/
     }
-
-
     public void setAttendance(Student obj,int ind){
         this.obj[ind]= new Student(obj);
     }
@@ -463,7 +573,6 @@ class Course{
     public String getCouseName(){
         return subCode+" "+subName;
     }
-
     public Student getInfoStud(int ind){
         return obj[ind];
     }
@@ -489,7 +598,7 @@ class Course{
 class Data {
     static Course[] course;
 
-    static void readData(){
+    static void readData() throws IOException{
         try{
             Course.setNumberOfSubjects();}
         catch (Exception e){
@@ -497,11 +606,11 @@ class Data {
         }
         course = new Course[Course.numberOfSubjects];
 
-        try{
         BufferedReader sc = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
         String line = sc.readLine();
         String[] data_lst;
         data_lst = line.split(",");
+        //reading subject names form file to class and instantiating sub list
         int index = 0,count=0;
         for (String s : data_lst) {
             if (!s.isEmpty() && count!=0) {
@@ -532,28 +641,20 @@ class Data {
             studno++;
         }
         sc.close();
-        }catch (FileNotFoundException e){
-            System.out.println("File not found");
-        }catch (IOException e){
-            System.out.println(e);
-        }
     }
 
-    static void writeData(){
-        try{
+    static void writeData() throws  IOException{
         BufferedReader inp = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
-        String[] line = new String[4];
+        BufferedWriter out = new BufferedWriter(new FileWriter("D:\\3rd Sem psg tech\\OOPS\\Attend_copy.csv"));
+        String line;
         int count=0;
-        while((line[count]=inp.readLine())!=null){
+        while((line=inp.readLine())!=null){
+            out.write(line + "\n");
             count++;
-            if(count==4) break;
+            if(count==4)
+                break;
         }
-        BufferedWriter out = new BufferedWriter(new FileWriter("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
-        count=0;
-        while(count<4){
-            out.write(line[0]+'\n');
-            count++;
-        }
+
         Student obj;
         int flag=0;
         for(int i=0;i<100;i++) {
@@ -577,19 +678,17 @@ class Data {
         }
         inp.close();
         out.close();
-        }catch (FileNotFoundException e){
-            System.out.println("file not found");
-        }
-        catch (IOException e){
-            System.out.println(e);
-        }
     }
 }
 
-class Main {
-    public static void main(String[] args){
+class Main{
+    public static void main(String[] args)   throws IOException{
 
         Data.readData();
+        //Data.course[0].display(1);
+        //StudentLogIn.getinfo();
+        Data.writeData();
+
 
         JFrame jf = new JFrame("Attendance Tracker");
 
@@ -598,55 +697,51 @@ class Main {
         jl1 = new JLabel("Username ");
         jl2 = new JLabel("Password ");
 
-        JTextField jt1, jt2;
-        jt1 = new JTextField();
-        jt2 = new JPasswordField();
+        JTextField jt1, jt2 ;
+        jt1 = new JTextField("19Z301");
+        jt2 = new JPasswordField("19Z301PSGTECH");
         jt1.setBounds(500, 200, 200, 20);
         jt2.setBounds(500, 240, 200, 20);
-        jf.add(jt1);
-        jf.add(jt2);
+        jf.add(jt1);jf.add(jt2);
 
 
         jl1.setBounds(400, 200, 200, 20);
         jl2.setBounds(400, 240, 200, 20);
-        jf.add(jl1);
-        jf.add(jl2);
+        jf.add(jl1);jf.add(jl2);
 
-        JRadioButton rb1, rb2;
-        ButtonGroup bg;
+        JRadioButton rb1, rb2 ;
+        ButtonGroup bg ;
         rb1 = new JRadioButton("Student");
         rb2 = new JRadioButton("Staff");
         rb1.setBounds(450, 300, 70, 20);
         rb2.setBounds(450, 350, 70, 20);
         bg = new ButtonGroup();
-        bg.add(rb1);
-        bg.add(rb2);
-        jf.add(rb1);
-        jf.add(rb2);
+        bg.add(rb1);bg.add(rb2);
+        jf.add(rb1);jf.add(rb2);
 
         jb.setBounds(450, 400, 100, 50);
         jf.add(jb);
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (rb1.isSelected()) {
+                if(rb1.isSelected()){
                     try {
                         StudentLogIn.getinfo(jt1, jt2);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
-                } else if (rb2.isSelected()) {
+                }
+                else if(rb2.isSelected()){
                     StaffLogin.getinfo(jt1, jt2);
 
-                } else JOptionPane.showMessageDialog(null, "Select either Student or Staff");
+                }
+                else JOptionPane.showMessageDialog(null, "Select either Student or Staff");
             }
         });
 
-
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(1100, 500);
         jf.setLayout(null);
         jf.setVisible(true);
-
-        Data.writeData();
     }
 }
