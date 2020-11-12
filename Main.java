@@ -79,8 +79,8 @@ class StudentLogIn{
     private static boolean checkMatch(String name, String roll){
         String[] heading = {"Course","Present","Late","Excused absence","Unexcused absence"};
         String[][] data = new String[Data.course.length +1][5];
-
-        int j =0 ;
+        data[0] = heading;
+        int j =1 ;
         for(Course sub:Data.course){
             int i =0 ;
             if(sub.getInfoStud(name,roll)!=null) {
@@ -112,13 +112,13 @@ class StudentLogIn{
             JTable jTab = new JTable(data, heading);
             jTab.setBounds(30, 60, 1000, 300);
             newJf.add(jTab);
-            JTableHeader header = jTab.getTableHeader();
-            header.setBackground(Color.LIGHT_GRAY);
+            //JTableHeader header = jTab.getTableHeader();
+            //header.setBackground(Color.LIGHT_GRAY);
             //JScrollPane sp=new JScrollPane(jTab);
             //newJf.add(sp);
 
             newJf.setSize(1100, 500);
-            //newJf.setLayout(null);
+            newJf.setLayout(null);
             newJf.setVisible(true);
         }
         return obj != null;
@@ -156,9 +156,9 @@ class StaffLogin {
         JButton view = new JButton("View Attendance");
         JButton edit = new JButton("Edit student record");
         JButton entry = new JButton("Attendance entry");
-        view.setBounds(490, 100, 100, 40);
-        edit.setBounds(490, 200, 100, 40);
-        entry.setBounds(490, 300, 100, 40);
+        view.setBounds(390, 100, 300, 40);
+        edit.setBounds(390, 200, 300, 40);
+        entry.setBounds(390, 300, 300, 40);
 
         stF.add(edit);
         stF.add(view);
@@ -261,28 +261,45 @@ class StaffLogin {
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ex) {
-                for(int i=0; i<100; i++) {
-                    boolean inpFlag=false;
+                boolean inpFlag=true;
+                for(int i=0; i<100; i++){
+                    Student obj = Data.course[ind].getInfoStud(i);
+                    if (obj == null)
+                        break;
+                    if (p[i].isSelected()) {}
+                    else if (l[i].isSelected()) {}
+                    else if (e[i].isSelected()) {}
+                    else if (u[i].isSelected()) {}
+                    else {
+                        JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
+                        inpFlag = false;
+                        break;
+                    }
+                }
+                if(inpFlag) {
+                    for (int i = 0; i < 100; i++) {
+
                     /*if (inpFlag) {
                         JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
                         inpFlag = false;
                         break;
                     }*/
-                    //Scanner in = new Scanner(System.in);
-                    Student obj = Data.course[ind].getInfoStud(i);
-                    if (obj == null)
-                        break;
+                        //Scanner in = new Scanner(System.in);
+                        Student obj = Data.course[ind].getInfoStud(i);
+                        if (obj == null)
+                            break;
 
-                    if (p[i].isSelected()) obj.incrementVal(0);
-                    else if (l[i].isSelected()) obj.incrementVal(1);
-                    else if (e[i].isSelected()) obj.incrementVal(2);
-                    else if (u[i].isSelected()) obj.incrementVal(3);
-                    else {
-                        JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
-                        break;
+                        if (p[i].isSelected()) obj.incrementVal(0);
+                        else if (l[i].isSelected()) obj.incrementVal(1);
+                        else if (e[i].isSelected()) obj.incrementVal(2);
+                        else if (u[i].isSelected()) obj.incrementVal(3);
+                        else {
+                            JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
+                            break;
+                        }
+                        Data.course[ind].setAttendance(obj, i);
+                        //System.out.println("Entries recorded");
                     }
-                    Data.course[ind].setAttendance(obj, i);
-                    //System.out.println("Entries recorded");
                 }
             }
         });
@@ -370,18 +387,21 @@ class StaffLogin {
                     ut.setBounds(210, 225, 30, 15);
                     chan1.add(ut);
 
+                    JButton submit1 = new JButton("Submit");
+                    submit1.setBounds(100, 280, 80, 40);
+                    chan1.add(submit1);
+
                     //System.out.println("Enter new values for Present, absent and unexcused absence respectively");
-                    int[] ar = new int[4];
-                    ar[0] = Integer.parseInt(pt.getText());
-                    ar[1] = Integer.parseInt(lt.getText());
-                    ar[2] = Integer.parseInt(et.getText());
-                    ar[3] = Integer.parseInt(ut.getText());
-                    JButton submit = new JButton("Submit");
-                    submit.setBounds(100, 200, 80, 40);
-                    chan1.add(submit);
-                    submit.addActionListener(new ActionListener() {
+
+
+                    submit1.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            int[] ar = new int[4];
+                            ar[0] = Integer.parseInt(pt.getText());
+                            ar[1] = Integer.parseInt(lt.getText());
+                            ar[2] = Integer.parseInt(et.getText());
+                            ar[3] = Integer.parseInt(ut.getText());
                             String Name = jtN.getText();
                             String rollNum = jtR.getText();
                             int studInd = Data.course[ind].getStudind(Name, rollNum);
