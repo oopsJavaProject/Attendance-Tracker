@@ -378,70 +378,7 @@ class StaffLogin {
 
             }
         });
-        String Name = jtN.getText();
-        String rollNum = jtR.getText();
-        int studInd = Data.course[ind].getStudind(Name,rollNum);
-        if (studInd != -1) {
-            JFrame chan1 = new JFrame("Change entry");
-            chan1.setSize(1100, 500);
-            chan1.setLayout(null);
-            chan1.setVisible(true);
-            Student obj = Data.course[ind].getInfoStud(studInd);
-
-            JLabel info = new JLabel("Old values for Present, Late, ExcusedAbsence and UnexcusedAbsence are" + obj.toString(0) + " respectively");
-            info.setBounds(10, 60, 250, 20);
-            chan1.add(info);
-
-            JLabel info2 = new JLabel("Enter new values");
-            info2.setBounds(50, 80, 80, 20);
-            chan1.add(info2);
-
-            JLabel p = new JLabel("Present");
-            p.setBounds(50, 100, 80, 20);
-            chan1.add(p);
-            JTextField pt = new JTextField();
-            pt.setBounds(130, 100, 30, 30);
-            chan1.add(pt);
-
-            JLabel l = new JLabel("Late");
-            l.setBounds(50, 120, 80, 20);
-            chan1.add(l);
-            JTextField lt = new JTextField();
-            lt.setBounds(130, 120, 30, 30);
-            chan1.add(lt);
-
-            JLabel e = new JLabel("ExcusedAbsence");
-            e.setBounds(50, 140, 80, 20);
-            chan1.add(e);
-            JTextField et = new JTextField();
-            et.setBounds(130, 140, 30, 30);
-            chan1.add(et);
-
-            JLabel u = new JLabel("UnexcusedAbsence");
-            u.setBounds(50, 160, 80, 20);
-            chan1.add(u);
-            JTextField ut = new JTextField();
-            ut.setBounds(130, 160, 30, 30);
-            chan1.add(ut);
-
-            int[] ar = new int[4];
-            ar[0] = Integer.parseInt(pt.getText());
-            ar[1] = Integer.parseInt(lt.getText());
-            ar[2] = Integer.parseInt(et.getText());
-            ar[3] = Integer.parseInt(ut.getText());
-            JButton submit = new JButton("Submit");
-            submit.setBounds(100, 200, 80, 40);
-            chan1.add(submit);
-            submit.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String Name = jtN.getText();
-                    String rollNum = jtR.getText();
-                    int studInd = Data.course[ind].getStudind(Name, rollNum);
-                    Data.course[ind].setAttendance(rollNum, Name, ar, studInd);
-                }
-            });
-        }
+        
     }
 }
 
