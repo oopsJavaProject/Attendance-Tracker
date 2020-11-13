@@ -468,8 +468,6 @@ class Course{
         jTab.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         panel.add(pane);
         view.add(panel);
-        //view.setUndecorated(true);//PLAIN_DIALOG
-        //view.getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
         view.setSize(1100, 500);
         view.setVisible(true);
     }
