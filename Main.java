@@ -14,7 +14,7 @@ class Student{
 
     public Student(String studRollNo, String studName,int[] ar) {
         this.studRollNo = studRollNo;
-        this.studName = studName ;
+        this.studName = studName;
         System.arraycopy(ar, 0, attend, 0, 4);
     }
 
@@ -59,8 +59,6 @@ class Student{
     public void incrementVal(int flag){
         attend[flag]++;
     }
-
-
 }
 
 class StudentLogIn{
@@ -230,28 +228,39 @@ class StaffLogin {
             atten[i].add(e[i]);
             atten[i].add(u[i]);
         }
+        JRadioButton manual = new JRadioButton("manual");
+        JRadioButton allPres = new JRadioButton("AllPresent");
+        manual.setBounds(450, 10, 60, 50);
+        allPres.setBounds(550, 10,80,50);
+        entF.add(manual); entF.add(allPres);
+        ButtonGroup bgs = new ButtonGroup();
+        bgs.add(manual);bgs.add(allPres);
+
+
+
         JButton finish = new JButton("Finish");
         finish.setBounds(650, 10,100,50);
         entF.add(finish);
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ex) {
-                boolean inpFlag=true;
-                for(int i=0; i<100; i++){
+                if (manual.isSelected()){
+                    boolean inpFlag = true;
+                for (int i = 0; i < 100; i++) {
                     Student obj = Data.course[ind].getInfoStud(i);
                     if (obj == null)
                         break;
-                    if (p[i].isSelected()) {}
-                    else if (l[i].isSelected()) {}
-                    else if (e[i].isSelected()) {}
-                    else if (u[i].isSelected()) {}
-                    else {
+                    if (p[i].isSelected()) {
+                    } else if (l[i].isSelected()) {
+                    } else if (e[i].isSelected()) {
+                    } else if (u[i].isSelected()) {
+                    } else {
                         JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
                         inpFlag = false;
                         break;
                     }
                 }
-                if(inpFlag) {
+                if (inpFlag) {
                     for (int i = 0; i < 100; i++) {
 
                         Student obj = Data.course[ind].getInfoStud(i);
@@ -270,6 +279,19 @@ class StaffLogin {
                     }
                 }
                 Data.writeData();
+            }
+                if(allPres.isSelected()) {
+                    for (int i = 0; i < 100; i++) {
+                        Student obj = Data.course[ind].getInfoStud(i);
+                        if (obj == null)
+                            break;
+
+                        obj.incrementVal(0);
+
+                        Data.course[ind].setAttendance(obj, i);
+                    }
+                    Data.writeData();
+                }
             }
         });
 
@@ -446,8 +468,8 @@ class Course{
         jTab.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         panel.add(pane);
         view.add(panel);
-        view.setUndecorated(true);
-        view.getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
+        //view.setUndecorated(true);//PLAIN_DIALOG
+        //view.getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
         view.setSize(1100, 500);
         view.setVisible(true);
     }
