@@ -1,4 +1,5 @@
-package pack3;
+package com.company;
+
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -246,40 +247,40 @@ class StaffLogin {
             public void actionPerformed(ActionEvent ex) {
                 if (manual.isSelected()){
                     boolean inpFlag = true;
-                for (int i = 0; i < 100; i++) {
-                    Student obj = Data.course[ind].getInfoStud(i);
-                    if (obj == null)
-                        break;
-                    if (p[i].isSelected()) {
-                    } else if (l[i].isSelected()) {
-                    } else if (e[i].isSelected()) {
-                    } else if (u[i].isSelected()) {
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
-                        inpFlag = false;
-                        break;
-                    }
-                }
-                if (inpFlag) {
                     for (int i = 0; i < 100; i++) {
-
                         Student obj = Data.course[ind].getInfoStud(i);
                         if (obj == null)
                             break;
-
-                        if (p[i].isSelected()) obj.incrementVal(0);
-                        else if (l[i].isSelected()) obj.incrementVal(1);
-                        else if (e[i].isSelected()) obj.incrementVal(2);
-                        else if (u[i].isSelected()) obj.incrementVal(3);
-                        else {
+                        if (p[i].isSelected()) {
+                        } else if (l[i].isSelected()) {
+                        } else if (e[i].isSelected()) {
+                        } else if (u[i].isSelected()) {
+                        } else {
                             JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
+                            inpFlag = false;
                             break;
                         }
-                        Data.course[ind].setAttendance(obj, i);
                     }
+                    if (inpFlag) {
+                        for (int i = 0; i < 100; i++) {
+
+                            Student obj = Data.course[ind].getInfoStud(i);
+                            if (obj == null)
+                                break;
+
+                            if (p[i].isSelected()) obj.incrementVal(0);
+                            else if (l[i].isSelected()) obj.incrementVal(1);
+                            else if (e[i].isSelected()) obj.incrementVal(2);
+                            else if (u[i].isSelected()) obj.incrementVal(3);
+                            else {
+                                JOptionPane.showMessageDialog(null, "Attendance not alloted for all");
+                                break;
+                            }
+                            Data.course[ind].setAttendance(obj, i);
+                        }
+                    }
+                    Data.writeData();
                 }
-                Data.writeData();
-            }
                 if(allPres.isSelected()) {
                     for (int i = 0; i < 100; i++) {
                         Student obj = Data.course[ind].getInfoStud(i);
@@ -468,6 +469,8 @@ class Course{
         jTab.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         panel.add(pane);
         view.add(panel);
+        //view.setUndecorated(true);//PLAIN_DIALOG
+        //view.getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
         view.setSize(1100, 500);
         view.setVisible(true);
     }
@@ -565,14 +568,14 @@ class Data {
             BufferedReader inp = new BufferedReader(new FileReader("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
             String[] line = new String[4];
             int count=0;
-            while((line[count]=inp.readLine())!=null){
+            while(count<4){
+                line[count]=inp.readLine();
                 count++;
-                if(count==4) break;
             }
             BufferedWriter out = new BufferedWriter(new FileWriter("D:\\3rd Sem psg tech\\OOPS\\Attend.csv"));
             count=0;
             while(count<4){
-                out.write(line[0]+'\n');
+                out.write(line[count]+'\n');
                 count++;
             }
             Student obj;
